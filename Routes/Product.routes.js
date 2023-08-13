@@ -62,5 +62,25 @@ router.delete("/:productId", async (req, res) => {
     res.status(400).json({ error: "Failed to delete the product." });
   }
 });
+router.get("/category/:categoryName", async (req, res) => {
+  try {
+    const category = req.params.categoryName;
+    const products = await Product.find({ category: category });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching products by category." });
+  }
+});
+
+// Get products by subcategory
+router.get("/subcategory/:subcategoryName", async (req, res) => {
+  try {
+    const subcategory = req.params.subcategoryName;
+    const products = await Product.find({ subcategory: subcategory });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred while fetching products by subcategory." });
+  }
+});
 
 module.exports = router;
