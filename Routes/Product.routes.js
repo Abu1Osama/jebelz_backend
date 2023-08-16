@@ -62,6 +62,7 @@ router.delete("/:productId", async (req, res) => {
     res.status(400).json({ error: "Failed to delete the product." });
   }
 });
+
 router.get("/category/:categoryName", async (req, res) => {
   try {
     const category = req.params.categoryName;
