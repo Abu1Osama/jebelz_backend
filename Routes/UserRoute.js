@@ -23,9 +23,9 @@ router.post("/signup", async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ msg: "User created successfully." });
+    res.status(201).send({ msg: "User created successfully." });
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    res.status(500).send({msg: error.message })
   }
 });
 
@@ -35,19 +35,19 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ msg: "User not found." });
+      return res.status(404).send({ msg: "User not found." });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ msg: "Invalid password." });
+      return res.status(401).send({ msg: "Invalid password." });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
-    res.json({ token, user });
+    res.send({ token, user });
   } catch (error) {
-    res.status(500).json({ msg:error.message });
+    res.status(500).send({msg: error.message })
   }
 });
 
