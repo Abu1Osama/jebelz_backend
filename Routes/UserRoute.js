@@ -10,7 +10,7 @@ router.post("/signup", async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists." });
+      return res.status(400).send({ msg: "Email already exists." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,9 +23,9 @@ router.post("/signup", async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ message: "User created successfully." });
+    res.status(201).json({ msg: "User created successfully." });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ msg: error.message });
   }
 });
 
@@ -35,19 +35,19 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ error: "User not found." });
+      return res.status(404).json({ msg: "User not found." });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ error: "Invalid password." });
+      return res.status(401).json({ msg: "Invalid password." });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
     res.json({ token, user });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while logging in." });
+    res.status(500).json({ msg:error.message });
   }
 });
 
